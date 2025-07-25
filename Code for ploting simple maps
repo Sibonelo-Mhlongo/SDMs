@@ -1,0 +1,69 @@
+install.packages("maptools")
+install.packages("rgeos")
+install.packages("raster")
+install.packages("rgdal")
+install.packages("dismo")
+install.packages("rnaturalearth")
+
+library(maptools)
+library(rgeos)
+library(raster)
+library(rgdal)
+library(dismo)
+library(maps)
+library(sp)
+library(rnaturalearth)
+
+#plot your observation points
+data("wrld_simpl")
+read.csv("C:/Users/27768775/Downloads/Mlu Data/Distribution of Billadiera in SA.csv")
+Occurrences=read.csv("C:/Users/27768775/Downloads/Mlu Data/Distribution of Billadiera in SA.csv")
+
+#make sure occurrences are where they are supposed to be
+plot(wrld_simpl)
+topo <- ne_download(scale = 50, category = "physical", type = "raster")
+sa <- wrld_simpl[wrld_simpl$NAME == "South Africa", ]
+map("world", regions = "South Africa", col = "lightgray", fill = TRUE, bg = "white", ylim = c(-35, -22), xlim = c(16, 33))
+
+# ylim=c(-35, -22), xlim=c(16, 33) for SA boundries
+
+# Add north arrow
+map.axes(annotate = 4)
+
+# Add scale bar
+map.scale(ratio = FALSE, metric = TRUE, relwidth = 0.1)
+
+plot(sa, add = TRUE)
+plot(topo, add = TRUE)
+
+library(rnaturalearthdata)
+install.packages("rnaturalearthdata")
+
+Download topographic data for South Africa
+topo <- ne_download(scale = 20, category = "physical", type = "raster", country = "South Africa")
+# Load topographic data
+world_topo <- ne_topo(country = "South Africa", returnclass = "sf")
+
+# Extract South Africa data
+data(wrld_simpl)
+sa <- wrld_simpl[wrld_simpl$NAME == "South Africa", ]
+
+# Plot base map with topography
+plot(world_topo["raster"], col = terrain.colors(50), legend = FALSE)
+plot(sa, add = TRUE)
+
+
+
+
+map("world", regions="South Africa", col="lightgray", fill=TRUE, bg="white", ylim=c(-37, -34), xlim=c(17, 19))
+
+# Plot South African boundaries
+plot(sa, add=TRUE)
+plot(sa)
+points(Occurrences$Longitude, Occurrences$Latitude, col="red", pch=2, cex = 0.5)
+
+
+#zoom (Japan)
+plot(wrld_simpl, xlim=c(20,22), ylim=c(-20,-40), axes=T)
+
+
